@@ -21,12 +21,11 @@
 		   
 		   
 		   
-		   /**
-    * This callback will be executed every time a geolocation is recorded in the background.
-    */
+		   /**    * This callback will be executed every time a geolocation is recorded in the background.    */
     var callbackFn = function(location) {
         console.log('[js] BackgroundGeolocation callback:  ' + location.latitude + ',' + location.longitude);
- 
+		var element = document.getElementById('geolocation');
+            element.innerHTML = element.innerHTML + 'ackgroundGeolocation callback: '+ location.latitude + ',' + location.longitude+ '<br />' ;
         // Do your HTTP request here to POST location to your server. 
         // jQuery.post(url, JSON.stringify(location)); 
  
@@ -40,6 +39,7 @@
  
     var failureFn = function(error) {
         console.log('BackgroundGeolocation error');
+		element.innerHTML = element.innerHTML + 'ackgroundGeolocation error +' '<br />' ;
     };
  
     // BackgroundGeolocation is highly configurable. See platform specific configuration options 
