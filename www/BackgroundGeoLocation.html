@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Device Properties Example</title>
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript">
+
+
+
+        // Wait for device API libraries to load
+        //
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+        // device APIs are available
+        //
+        function onDeviceReady() {
+           // var options = {frequency: 3000, enableHighAccuracy: true};
+           // navigator.geolocation.watchPosition(onSuccess, onError, options);
+		   
+		   
+		   
+		   
+		   /**
+    * This callback will be executed every time a geolocation is recorded in the background.
+    */
+    var callbackFn = function(location) {
+        console.log('[js] BackgroundGeolocation callback:  ' + location.latitude + ',' + location.longitude);
+ 
+        // Do your HTTP request here to POST location to your server. 
+        // jQuery.post(url, JSON.stringify(location)); 
+ 
+        /*
+        IMPORTANT:  You must execute the finish method here to inform the native plugin that you're finished,
+        and the background-task may be completed.  You must do this regardless if your HTTP request is successful or not.
+        IF YOU DON'T, ios will CRASH YOUR APP for spending too much time in the background.
+        */
+        backgroundGeolocation.finish();
+    };
+ 
+    var failureFn = function(error) {
+        console.log('BackgroundGeolocation error');
+    };
+ 
+    // BackgroundGeolocation is highly configurable. See platform specific configuration options 
+    backgroundGeolocation.configure(callbackFn, failureFn, {
+        desiredAccuracy: 10,
+        stationaryRadius: 20,
+        distanceFilter: 30,
+        interval: 60000
+    });
+ 
+    // Turn ON the background-geolocation system.  The user will be tracked whenever they suspend the app. 
+    backgroundGeolocation.start();
+ 
+    // If you wish to turn OFF background-tracking, call the #stop method. 
+    // backgroundGeolocation.stop();
+		   
+		   
+		   
+        }
+
+        // onSuccess Geolocation
+        //
+        function onSuccess(position) {
+            var element = document.getElementById('geolocation');
+            element.innerHTML = element.innerHTML + 
+                                'Latitude: '          + position.coords.latitude         + ' ' +
+                                'Longitude: '         + position.coords.longitude        + '<br />' +
+                                'Altitude: '          + position.coords.altitude         + '<br />' +
+                                'Accuracy: '          + position.coords.accuracy         + '<br />' +
+                                'Altitude Accuracy: ' + position.coords.altitudeAccuracy + '<br />' +
+                                'Heading: '           + position.coords.heading          + '<br />' +
+                                'Speed: '             + position.coords.speed            + '<br />' +
+                                'Timestamp: '         + position.timestamp               + '<br />'
+                                ;
+        }
+
+        // onError Callback receives a PositionError object
+        //
+        function onError(error) {
+            alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+        }
+
+    </script>
+  </head>
+  <body>
+    <p id="geolocation">Finding geolocation...</p>
+  </body>
+</html>
